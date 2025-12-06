@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vacation App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">VacationApp</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if current_user %}
+            <li class="nav-item"><a class="nav-link" href="{{ home_url }}">Главная</a></li>
+              <li class="nav-item"><a class="nav-link" href="/requests">Заявки</a></li>
+              <li class="nav-item"><a class="nav-link" href="/calendar">Календарь</a></li>
+              {% if current_user.role == 'manager' %}
+                <li class="nav-item"><a class="nav-link" href="/manager/requests">Заявки отдела</a></li>
+              {% endif %}
+              {% if current_user.role == 'hr' %}
+                <li class="nav-item"><a class="nav-link" href="/hr/requests">HR: все заявки</a></li>
+              {% endif %}
+            {% endif %}
+          </ul>
+          <ul class="navbar-nav">
+            {% if current_user %}
+              <li class="nav-item"><span class="nav-link">{{ current_user.full_name }} ({{ current_user.role }})</span></li>
+              <li class="nav-item"><a class="nav-link" href="/logout">Выйти</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="/login">Войти</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container mt-4">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
