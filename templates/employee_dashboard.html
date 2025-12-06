@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Личный кабинет</h3>
+<div class="row">
+  <div class="col-md-4">
+    <div class="card p-3">
+      <h5>Баланс ({{ current_year }})</h5>
+      <p>Всего: <strong>{{ bal.total_days }}</strong></p>
+      <p>Использовано: <strong>{{ bal.used_days }}</strong></p>
+      <p>Запланировано: <strong>{{ planned }}</strong></p>
+      <p>Доступно: <strong>{{ available }}</strong></p>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <h5>Действия</h5>
+    <a class="btn btn-success" href="/request/new">Подать заявку</a>
+    <a class="btn btn-secondary" href="/requests">Мои заявки</a>
+    <a class="btn btn-info" href="/calendar">Календарь отдела</a>
+  </div>
+</div>
+{% endblock %}

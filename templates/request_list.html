@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Заявки</h3>
+<table class="table">
+  <thead><tr><th>Сотрудник</th><th>Период</th><th>Тип</th><th>Статус</th><th>Комментарий</th></tr></thead>
+  <tbody>
+  {% for r in requests %}
+    <tr>
+      <td>{{ services.get_user_by_id(r.user_id).full_name }}</td>
+      <td>{{ r.start_date }} → {{ r.end_date }}</td>
+      <td>{{ r.type }}</td>
+      <td>
+        {% if r.status=='pending' %}<span class="badge bg-warning text-dark">На рассмотрении</span>
+        {% elif r.status=='approved' %}<span class="badge bg-success">Согласовано</span>
+        {% else %}<span class="badge bg-danger">Отклонено</span>{% endif %}
+      </td>
+      <td>{{ r.comment }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
