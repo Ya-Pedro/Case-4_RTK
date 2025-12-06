@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Заявки отдела</h3>
+<table class="table">
+  <thead><tr><th>Сотрудник</th><th>Период</th><th>Тип</th><th>Статус</th><th>Действия</th></tr></thead>
+  <tbody>
+  {% for r in requests %}
+    <tr>
+      <td>{{ services.get_user_by_id(r.user_id).full_name }}</td>
+      <td>{{ r.start_date }} → {{ r.end_date }}</td>
+      <td>{{ r.type }}</td>
+      <td>{{ r.status }}</td>
+      <td>
+        {% if r.status=='pending' %}
+          <form style="display:inline" method="post" action="/manager/action">
+            <input type="hidden" name="id" value="{{ r.id }}">
+            <input type="hidden" name="action" value="approve">
+            <button class="btn btn-success btn-sm">Одобрить</button>
+          </form>
+          <button class="btn btn-danger btn-sm" onclick="showReject('{{ r.id }}')">Отклонить</button>
+        {% else %}
+          —
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<div id="rejectModal" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5)">
+  <div style="background:#fff;padding:20px;max-width:500px;margin:50px auto;">
+    <h5>Отклонить заявку</h5>
+    <form method="post" action="/manager/action">
+      <input type="hidden" name="id" id="rejectId">
+      <input type="hidden" name="action" value="reject">
+      <div class="mb-3"><label>Комментарий</label><textarea name="comment" class="form-control" required></textarea></div>
+      <button class="btn btn-danger">Отправить</button>
+      <button type="button" class="btn btn-secondary" onclick="hideReject()">Отмена</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function showReject(id){ document.getElementById('rejectId').value = id; document.getElementById('rejectModal').style.display='block'; }
+  function hideReject(){ document.getElementById('rejectModal').style.display='none'; }
+</script>
+
+{% endblock %}
