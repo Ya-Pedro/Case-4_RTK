@@ -12,7 +12,7 @@ from uuid import uuid4
 import csv
 import io
 
-
+#Proverka
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 
