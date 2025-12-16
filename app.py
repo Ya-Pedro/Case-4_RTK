@@ -8,8 +8,10 @@ from sqlalchemy.orm import Session
 from services import SessionLocal, get_user_by_id
 from services import get_user_by_id, get_departments_dict, get_all_requests
 from flask import request, flash
+from uuid import uuid4
 import csv
 import io
+
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -97,7 +99,6 @@ def create_request():
     
     user_id = session.get('user_id')
     if request.method == 'POST':
-        from uuid import uuid4
         new_req = VacationRequest(
             id=str(uuid4()),
             user_id=user_id,
@@ -106,7 +107,7 @@ def create_request():
             type=request.form['type'],
             status='pending',
             comment=request.form.get('comment', ''),
-            created_at=date.today()
+            created_at=datetime.now()  # уникальная временная метка
         )
         session_db = SessionLocal()
         session_db.add(new_req)
@@ -153,6 +154,28 @@ def employee_dashboard():
                            available=available,
                            current_year=current_year)
 
+@app.route('/request/cancel', methods=['POST'])
+def cancel_request():
+    if session.get('role') != 'employee':
+        return redirect(url_for('login'))
+
+    req_id = request.form.get('id')
+    user_id = session.get('user_id')
+
+    session_db = SessionLocal()
+    req = session_db.query(VacationRequest).filter_by(id=req_id).first()
+
+    if not req or req.user_id != user_id or req.status != 'pending':
+        session_db.close()
+        return redirect(url_for('requests_route'))
+
+    req.status = 'cancelled'
+    session_db.commit()
+    session_db.close()
+
+    return redirect(url_for('requests_route'))
+
+
 @app.route('/hr/requests')
 def hr_requests():
     if session.get('role') != 'hr':
@@ -180,9 +203,13 @@ def api_events():
         elif r.status == 'pending':
             color = 'yellow'
             title_status = 'На рассмотрении'
-        else:
+        elif r.status == 'rejected':
             color = 'red'
             title_status = 'Отклонено'
+        elif r.status == 'cancelled':
+            color = 'gray'
+            title_status = 'Отменено'
+
 
         events.append({
             'title': f"{get_user_by_id(r.user_id).full_name} ({title_status})",

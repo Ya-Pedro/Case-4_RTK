@@ -1,21 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <h3>Личный кабинет</h3>
-<div class="row">
-  <div class="col-md-4">
-    <div class="card p-3">
-      <h5>Баланс ({{ current_year }})</h5>
-      <p>Всего: <strong>{{ bal.total_days }}</strong></p>
-      <p>Использовано: <strong>{{ bal.used_days }}</strong></p>
-      <p>Запланировано: <strong>{{ planned }}</strong></p>
-      <p>Доступно: <strong>{{ available }}</strong></p>
+
+<div class="row g-4">
+  <div class="col-md-3">
+    <div class="card p-4 text-center">
+      <h6>Всего дней</h6>
+      <h2>{{ bal.total_days }}</h2>
     </div>
   </div>
-  <div class="col-md-8">
-    <h5>Действия</h5>
-    <a class="btn btn-success" href="/request/new">Подать заявку</a>
-    <a class="btn btn-secondary" href="/requests">Мои заявки</a>
-    <a class="btn btn-info" href="/calendar">Календарь отдела</a>
+
+  <div class="col-md-3">
+    <div class="card p-4 text-center">
+      <h6>Использовано</h6>
+      <h2>{{ bal.used_days }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card p-4 text-center">
+      <h6>Запланировано</h6>
+      <h2>{{ planned }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card p-4 text-center">
+      <h6>Доступно</h6>
+      <h2>{{ available }}</h2>
+    </div>
   </div>
 </div>
+
+<div class="card p-4 mt-4">
+  <h5>Быстрые действия</h5>
+  <div class="d-flex gap-3 mt-3">
+    <a href="/request/new" class="btn btn-primary">➕ Новая заявка</a>
+    <a href="/requests" class="btn btn-secondary">📄 Мои заявки</a>
+    <a href="/calendar" class="btn btn-info">📅 Календарь</a>
+  </div>
+</div>
+
 {% endblock %}
