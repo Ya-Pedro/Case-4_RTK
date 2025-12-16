@@ -23,7 +23,7 @@ jobs:
           key: ${{ secrets.UBUNTU_SSH_KEY }}
           script: |
             echo "=== Deploy started ==="
-            cd /case4/case_4_local/
+            cd /rtk/case4/Case-4_RTK/
             git reset --hard
             git pull origin main
             docker compose down
