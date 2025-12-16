@@ -1,0 +1,31 @@
+name: Deploy Project
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.UBUNTU_HOST }}
+          port: ${{ secrets.UBUNTU_PORT }}
+          username: ${{ secrets.UBUNTU_USER }}
+          key: ${{ secrets.UBUNTU_SSH_KEY }}
+          script: |
+            echo "=== Deploy started ==="
+            cd /case4/case_4_local
+            git reset --hard
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
+            echo "=== Deploy finished ==="
