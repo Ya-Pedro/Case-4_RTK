@@ -43,16 +43,19 @@ def get_user_by_login(login: str):
 def get_user_requests(user_id: str):
     session = SessionLocal()
     try:
-        return session.query(VacationRequest).filter(
-            VacationRequest.user_id == user_id
-        ).all()
+        return session.query(VacationRequest)\
+                      .filter(VacationRequest.user_id == user_id)\
+                      .order_by(VacationRequest.created_at.desc())\
+                      .all()
     finally:
         session.close()
 
 def get_all_requests():
     session = SessionLocal()
     try:
-        return session.query(VacationRequest).all()
+        return session.query(VacationRequest)\
+                      .order_by(VacationRequest.created_at.desc())\
+                      .all()
     finally:
         session.close()
 
