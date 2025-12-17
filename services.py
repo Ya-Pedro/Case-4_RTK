@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, User, VacationRequest, Department
 
-# Загружаем .env
+
 load_dotenv()
 
 DB_HOST = os.getenv("DB_HOST")
