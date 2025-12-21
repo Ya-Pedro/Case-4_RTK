@@ -26,6 +26,6 @@ jobs:
             cd /rtk/case4/Case-4_RTK/
             git reset --hard
             git pull origin main
-            docker compose down -v
+            docker compose down
             docker compose up -d --build
             echo "=== Deploy finished ==="
